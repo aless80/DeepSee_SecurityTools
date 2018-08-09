@@ -47,7 +47,7 @@ New role created: DSAdmin user with %DeepSee_Portal,%DeepSee_ArchitectEdit,%Deep
                                     %DeepSee_Admin,%Service_Terminal,%Development,%DB_CACHESYS,%DB_SAMPLES
 Created simpleuser with password SYS and DSUser role
 Created poweruser with password SYS and DSPowerUser role
-Failed creating admin user: ERROR #837: User admin already exists
+Created admin with password SYS and DSAdmin role
 Allowed authentication methods for /csp/samples: Password, Login Cookie
 Allowed authentication methods for /csp/sys: Password, Login Cookie
 Allowed authentication methods for /csp/sys/bi: Password, Login Cookie
