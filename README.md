@@ -30,9 +30,52 @@ If your instance does not support UDL formatting please use the .xml file.
 Import the SecurityTools.cls class or the .xml if your instance does not support UDL formatting. 
 
 #### Using the class
-These
+This example calls the three methods in the Ale.SecurityTools class on the SAMPLES namespace: 
+
 ```
-Do ##class(%DeepSee.SUtils).Info()
-Do ##class(%DeepSee.SUtils).SecuritySetup("SAMPLES")
-Do ##class(%DeepSee.SUtils).SecurityRestore("SAMPLES")
+SAMPLES>Do ##class(Ale.SecurityTools).Info()
+
+ .SecuritySetup("samples")         //Set up security on namepsace
+ .SecurityRestore("samples")       //Restore from what SecuritySetup did
+
+SAMPLES>Do ##class(Ale.SecurityTools).SecuritySetup("SAMPLES")
+
+New role created: DSUser with %DeepSee_Portal,%Service_Terminal,%Development,%DB_SAMPLES
+New role created: DSPowerUser with %DeepSee_AnalyzerEdit,%DeepSee_Portal,
+                                   %DeepSee_PortalEdit,%Service_Terminal,%Development,%DB_SAMPLES
+New role created: DSAdmin user with %DeepSee_Portal,%DeepSee_ArchitectEdit,%DeepSee_AnalyzerEdit,
+                                    %DeepSee_Admin,%Service_Terminal,%Development,%DB_CACHESYS,%DB_SAMPLES
+Created simpleuser with password SYS and DSUser role
+Created poweruser with password SYS and DSPowerUser role
+Failed creating admin user: ERROR #837: User admin already exists
+Allowed authentication methods for /csp/samples: Password, Login Cookie
+Allowed authentication methods for /csp/sys: Password, Login Cookie
+Allowed authentication methods for /csp/sys/bi: Password, Login Cookie
+Allowed creation of login cookies
+Removed USE permission on %DeepSee_Admin
+Removed USE permission on %DeepSee_Analyzer
+Removed USE permission on %DeepSee_AnalyzerEdit
+Removed USE permission on %DeepSee_Architect
+Removed USE permission on %DeepSee_ArchitectEdit
+Removed USE permission on %DeepSee_ListingGroup
+Removed USE permission on %DeepSee_ListingGroupEdit
+Removed USE permission on %DeepSee_ListingGroupSQL
+Removed USE permission on %DeepSee_Portal
+Removed USE permission on %DeepSee_PortalEdit
+Removed USE permission on %DeepSee_ReportBuilder
+SAMPLES>Do ##class(Ale.SecurityTools).SecurityRestore("SAMPLES")
+
+DSUser role deleted
+DSPowerUser role deleted
+DSAdmin role deleted
+Deleted simpleuser
+Deleted poweruser
+Deleted admin
+Allowed authentication methods for /csp/sys: Unauthenticated
+Allowed authentication methods for /csp/sys/bi: Unauthenticated
+Allowed authentication methods for /csp/samples: Unauthenticated
+
+Do you want to give %DeepSee_ roles public USE permission? [N] 
+%DeepSee_* resources are left as they are
+
 ```
