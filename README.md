@@ -11,10 +11,10 @@ This class modifies the security settings in a Caché instance. For this reason 
 
 
 
-| User        | Role           | Resource  |
-| ------------- |:-------------| :----- |
-| simpleuser      | DSUser | %DeepSee_Portal<br>%Service_Terminal<br>%Development<br>DB<database> |
-| simpleuser      | DSUser | U<br>U<br>U<br>RW |
+| User        | Role   | Resource  | Permission   |
+| ----------- |:-------| :-------- | :----------- |
+| simpleuser  | DSUser | %DeepSee_Portal<br>%Service_Terminal<br>%Development<br>DB&gt;database> | U<br>U<br>U<br>RW |
+| simpleuser  | DSUser | U<br>U<br>U<br>RW | U<br>U<br>U<br>RW |
 
 <!--
 ### Content
