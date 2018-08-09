@@ -14,11 +14,7 @@ This class modifies the security settings in a Caché instance. For this reason 
 | User        | Role           | Resource  |
 | ------------- |:-------------:| -----:|
 | simpleuser      | DSUser | %DeepSee_Portal |
-| simpleuser      | DSUser | <ul>
-          <li>item1</li>
-          <li>item2</li>
-        </ul> 
-|
+| simpleuser      | DSUser | <ul><li>item1</li><li>item2</li></ul> |
 
 <!--
 ### Content
