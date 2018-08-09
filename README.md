@@ -7,15 +7,18 @@ This class modifies the security settings in a Caché instance. For this reason 
 
 | User | Role | Resource  |
 |: --------- |:--------------------------------------:|:-----:|
-| simpleuser | DSUser | %DeepSee_Portal:U,%Service_Terminal:U,%Development:U DBresource_":RW |
+|  | DSUser | :U,%Service_Terminal:U,%Development:U DBresource_":RW |
 
 
 
 | User        | Role           | Resource  |
 | ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+| simpleuser      | DSUser | %DeepSee_Portal |
+| simpleuser      | DSUser | %DeepSee_Portal 
+2nd
+
+3rd
+|
 
 <!--
 ### Content
