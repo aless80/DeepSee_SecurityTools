@@ -12,7 +12,7 @@ This class modifies the security settings in a Caché instance. For this reason 
 
 
 | User        | Role           | Resource  |
-| ------------- |:-------------:| -----:|
+| ------------- |:-------------:| :-----:|
 | simpleuser      | DSUser | %DeepSee_Portal |
 | simpleuser      | DSUser | item1<br>item2 |
 
