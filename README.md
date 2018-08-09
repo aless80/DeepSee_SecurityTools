@@ -13,9 +13,9 @@ This class modifies the security settings in a Caché instance. For this reason 
 
 | User        | Role        | Resource  | Permission   |
 | ----------- |:----------- | :-------- | :----------- |
-| simpleuser  | DSUser      | %DeepSee_Portal<br>%Service_Terminal<br>%Development<br>DB&gt;database> | U<br>U<br>U<br>RW |
-| poweruser   | DSPowerUser | %DeepSee_AnalyzerEdit<br>%DeepSee_Portal<br>%DeepSee_PortalEdit<br>%Service_Terminal<br>%Development<br>DB&gt;database> | U<br>U<br>U<br>U<br>U<br>RW |
-| admin       | DSAdmin     | %DeepSee_ArchitectEdit<br>%DeepSee_AnalyzerEdit<br>%DeepSee_Portal<br>%DeepSee_Admin<br>%Service_Terminal<br>%Development<br>%DB_CACHESYS<br>DBresource<br>DB&gt;database> | U<br>U<br>U<br>U<br>U<br>U<br>RW<br>RW |
+| simpleuser  | DSUser      | %DeepSee_Portal<br>%Service_Terminal<br>%Development<br>DB&lt;database> | U<br>U<br>U<br>RW |
+| poweruser   | DSPowerUser | %DeepSee_AnalyzerEdit<br>%DeepSee_Portal<br>%DeepSee_PortalEdit<br>%Service_Terminal<br>%Development<br>DB&lt;database> | U<br>U<br>U<br>U<br>U<br>RW |
+| admin       | DSAdmin     | %DeepSee_ArchitectEdit<br>%DeepSee_AnalyzerEdit<br>%DeepSee_Portal<br>%DeepSee_Admin<br>%Service_Terminal<br>%Development<br>%DB_CACHESYS<br>DBresource<br>DB&lt;database> | U<br>U<br>U<br>U<br>U<br>U<br>RW<br>RW |
 
 
 
