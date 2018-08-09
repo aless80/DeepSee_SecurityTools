@@ -33,12 +33,12 @@ Import the SecurityTools.cls class or the .xml if your instance does not support
 This example calls the three methods in the Ale.SecurityTools class on the SAMPLES namespace: 
 
 ```
-SAMPLES>Do ##class(Ale.SecurityTools).Info()
+SAMPLES>**Do ##class(Ale.SecurityTools).Info()**
 
  .SecuritySetup("samples")         //Set up security on namepsace
  .SecurityRestore("samples")       //Restore from what SecuritySetup did
 
-SAMPLES>Do ##class(Ale.SecurityTools).SecuritySetup("SAMPLES")
+SAMPLES>**Do ##class(Ale.SecurityTools).SecuritySetup("SAMPLES")**
 
 New role created: DSUser with %DeepSee_Portal,%Service_Terminal,%Development,%DB_SAMPLES
 New role created: DSPowerUser with %DeepSee_AnalyzerEdit,%DeepSee_Portal,
@@ -63,7 +63,7 @@ Removed USE permission on %DeepSee_ListingGroupSQL
 Removed USE permission on %DeepSee_Portal
 Removed USE permission on %DeepSee_PortalEdit
 Removed USE permission on %DeepSee_ReportBuilder
-SAMPLES>Do ##class(Ale.SecurityTools).SecurityRestore("SAMPLES")
+SAMPLES>**Do ##class(Ale.SecurityTools).SecurityRestore("SAMPLES")**
 
 DSUser role deleted
 DSPowerUser role deleted
