@@ -32,7 +32,7 @@ Import the SecurityTools.cls class or the .xml if your instance does not support
 #### Using the class
 This example calls the three methods in the Ale.SecurityTools class on the SAMPLES namespace: 
 
-```
+<pre>
 SAMPLES><b>Do ##class(Ale.SecurityTools).Info()</b>
 
  .SecuritySetup("samples")         //Set up security on namepsace
@@ -77,5 +77,4 @@ Allowed authentication methods for /csp/samples: Unauthenticated
 
 Do you want to give %DeepSee_ roles public USE permission? [N] 
 %DeepSee_* resources are left as they are
-
-```
+</pre>
