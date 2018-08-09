@@ -2,9 +2,12 @@
 A class with methods that I commonly use to test or troubleshoot Security issues in IS Caché and DeepSee.
 
 ### Description
-This class modifies the security settings in a Caché instance. For this reason I recommend using it only in **test environments**. By default, three users are created with the following roles and permissions. 
+This class modifies the security settings in a Caché instance. For this reason I recommend using it **only in test environments**. By default, three users are created with the following roles and permissions:  
 
-TODO
+| User | Role | Resource | permission |
+|: --------- |:--------------------------------------:|:-----:|
+| simpleuser | DSUser | %DeepSee_Portal:U,%Service_Terminal:U,%Development:U DBresource_":RW |
+
 
 <!--
 ### Content
