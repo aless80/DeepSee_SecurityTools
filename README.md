@@ -36,12 +36,10 @@ This example calls the three methods in the Ale.SecurityTools class on the SAMPL
 
 <pre>
 SAMPLES><b>Do ##class(Ale.SecurityTools).Info()</b>
-
  .SecuritySetup("samples")         //Set up security on namepsace
  .SecurityRestore("samples")       //Restore from what SecuritySetup did
 
 SAMPLES><b>Do ##class(Ale.SecurityTools).SecuritySetup("SAMPLES")</b>
-
 New role created: DSUser with %DeepSee_Portal,%Service_Terminal,%Development,%DB_SAMPLES
 New role created: DSPowerUser with %DeepSee_AnalyzerEdit,%DeepSee_Portal,
                                    %DeepSee_PortalEdit,%Service_Terminal,%Development,%DB_SAMPLES
@@ -65,8 +63,8 @@ Removed USE permission on %DeepSee_ListingGroupSQL
 Removed USE permission on %DeepSee_Portal
 Removed USE permission on %DeepSee_PortalEdit
 Removed USE permission on %DeepSee_ReportBuilder
-SAMPLES><b>Do ##class(Ale.SecurityTools).SecurityRestore("SAMPLES")</b>
 
+SAMPLES><b>Do ##class(Ale.SecurityTools).SecurityRestore("SAMPLES")</b>
 DSUser role deleted
 DSPowerUser role deleted
 DSAdmin role deleted
