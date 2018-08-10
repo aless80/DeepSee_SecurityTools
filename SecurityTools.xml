@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for UNIX (SUSE Linux Enterprise Server for x86-64) 2017.2.1 (Build 801)" ts="2018-08-09 09:59:39">
+<Export generator="Cache" version="25" zv="Cache for UNIX (SUSE Linux Enterprise Server for x86-64) 2017.2.1 (Build 801)" ts="2018-08-10 09:29:30">
 <Class name="Ale.SecurityTools">
 <Super>%Persistent</Super>
-<TimeChanged>64869,35465.499953</TimeChanged>
+<TimeChanged>64870,34066.995759</TimeChanged>
 <TimeCreated>64869,35465.187427</TimeCreated>
 
 <Method name="Info">
@@ -11,23 +11,58 @@ Just list all methods and some tips</Description>
 <ClassMethod>1</ClassMethod>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
-	Write !," .SecuritySetup(""samples"")         //Set up security on namepsace"
-	Write !," .SecurityRestore(""samples"")       //Restore from what SecuritySetup did"
+	Write " .DefaultSecuritySetup(""samples"")         //Set up security on namepsace"
+	Write !," .SecurityRestore(""samples"")       //Restore from what DefaultSecuritySetup did"
+	Write !," .SecuritySetup(""samples"",""user"",""role"",""%DeepSee_Portal:U,%Development:U"")"
+	Write !,?30,"     //Create a user with role and resources. You can omit user to create a role"
+	Write !," .SecuritySetup(""samples"",""user"",""role1,role2"",)  //Create a user with two existing roles"
 	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="DefaultSecuritySetup">
+<Description><![CDATA[
+This method will implement the security model in Alessandro's post on DC. The aim is to speed up troubleshooting security issues. 
+<var>ns</var> is the namespace. Default is SAMPLES.<br/>
+Given an input ns namespace this method will:
+Create three roles associated to three new users, 
+Set authentication methods for /csp/<ns>, /csp/sys, /csp/sys/bi web applications to Password, Login cookie
+For /csp/<ns> ask to set the DeepSee Enable checkbox as enabled
+Allow creation of Login Cookies (so that you don't have to login 100 times)
+Remove public USE on %DeepSee_* resources]]></Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>ns:%String="SAMPLES"</FormalSpec>
+<Implementation><![CDATA[
+	//Get the default resource for the input namespace
+	Do ##class(%SYS.Namespace).GetNSInfo(ns,.info)
+	Set DBresource = info("Resource")
+	//Create three users with roles
+	Set resources = "%DeepSee_Portal:U,%Service_Terminal:U,%Development:U,"_DBresource_":RW"
+	Do ..SecuritySetup(ns, "simpleuser", "DSUser", resources)
+	Set resources = "%DeepSee_AnalyzerEdit:U,%DeepSee_Portal:U,%DeepSee_PortalEdit:U,%Service_Terminal:U,%Development:U,"_DBresource_":RW"
+	Do ..SecuritySetup(ns, "poweruser","DSPowerUser", resources)
+	//Set resources = "%DeepSee_ArchitectEdit:U,%DeepSee_AnalyzerEdit:U,%DeepSee_Portal:U,%DeepSee_Admin:U,%Service_Terminal:U,%Development:U,%DB_CACHESYS:RW,"_DBresource_":RW"
+	Do ..SecuritySetup(ns, , "DSAdmin", resources) //Create the DSAdmin role
+	Do ..SecuritySetup(ns, "admin", "DSPowerUser,DSAdmin") //admin user created with two roles
 ]]></Implementation>
 </Method>
 
 <Method name="SecuritySetup">
 <Description><![CDATA[
-This method will implement the security model in Alessandro's post on DC. The aim is to speed up troubleshooting security issues. 
-Given an input ns namespace this method will:
-  Create three roles associated to three new users, 
-  Set authentication methods for /csp/<ns>, /csp/sys, /csp/sys/bi web applications to Password, Login cookie
-  For /csp/<ns> ask to set the DeepSee Enable checkbox as enabled
-  Allow creation of Login Cookies (so that you don't have to login 100 times)
-  Remove public USE on %DeepSee_* resources]]></Description>
+Create a user with roles containing resources eg
+<var>ns</var> is the namespace. Default is SAMPLES.<br/>
+<var>user</var> is the user. Leave empty if you want to create a role with resources.<br/>
+<var>roles</var> comma separated list of existing roles to be added to the user. Use one single role if you want to create it.<br/>
+<var>resources</var> list of resources in the format role1:permission,role2:permission. The resource on the database corresponding to ns will be added automatically<br/>
+Examples
+Create a user with one role having three permission (plus %DB_SAMPLES):
+Do ##class(Ale.SecurityTools).SecuritySetup("SAMPLES", "simpleuser", "DSUser", "%DeepSee_Portal:U,%Service_Terminal:U,%Development:U")
+Create a new role:
+Do ##class(Ale.SecurityTools).SecuritySetup("SAMPLES", , "DSAdmin", "%DeepSee_ArchitectEdit:U,%DeepSee_AnalyzerEdit:U")
+Create a user with two existing roles:
+Do ##class(Ale.SecurityTools).SecuritySetup("SAMPLES", "admin", "DSPowerUser,DSAdmin")]]></Description>
 <ClassMethod>1</ClassMethod>
-<FormalSpec>ns:%String="samples",DBresource:%String="%DB_SAMPLES"</FormalSpec>
+<FormalSpec>ns:%String="SAMPLES",user:%String="",roles:%String="",resources:%String</FormalSpec>
 <Implementation><![CDATA[
 	Set ns = $ZCONVERT(ns,"U")
 	Set nsexists = ##class(%SYS.Namespace).Exists(ns)
@@ -35,31 +70,20 @@ Given an input ns namespace this method will:
 		Write !,ns," namespace does not exist. Aborting"
 		Return
 	}
-	//Get the default resource for the input namespace
-	Do ##class(%SYS.Namespace).GetNSInfo(ns,.info)
-	Set DBresource = info("Resource")
 	Set nsfrom = $SYSTEM.SYS.NameSpace()
 	ZN "%SYS"	
-	///Create roles
-	Set st = ##class(Security.Roles).Create("DSUser", "DSUser", "%DeepSee_Portal:U,%Service_Terminal:U,%Development:U,"_DBresource_":RW")
-	Write:st !,"New role created: DSUser with %DeepSee_Portal,%Service_Terminal,%Development,"_DBresource
-	Write:'st !,"Error on the DSUser role: ",$System.Status.GetOneErrorText(st)
-	Set st = ##class(Security.Roles).Create("DSPowerUser", "DSPowerUser", "%DeepSee_AnalyzerEdit:U,%DeepSee_Portal:U,%DeepSee_PortalEdit:U,%Service_Terminal:U,%Development:U,"_DBresource_":RW")
-	Write:st !,"New role created: DSPowerUser with %DeepSee_AnalyzerEdit,%DeepSee_Portal,",!,?35,"%DeepSee_PortalEdit,%Service_Terminal,%Development,"_DBresource
-	Write:'st !,"Error on the DSPowerUser role: ",$System.Status.GetOneErrorText(st)
-	Set st = ##class(Security.Roles).Create("DSAdmin", "DSAdmin", "%DeepSee_ArchitectEdit:U,%DeepSee_AnalyzerEdit:U,%DeepSee_Portal:U,%DeepSee_Admin:U,%Service_Terminal:U,%Development:U,%DB_CACHESYS:RW,"_DBresource_":RW")
-	Write:st !,"New role created: DSAdmin user with %DeepSee_Portal,%DeepSee_ArchitectEdit,%DeepSee_AnalyzerEdit,",!,?36,"%DeepSee_Admin,%Service_Terminal,%Development,%DB_CACHESYS,"_DBresource
-	Write:'st !,"Error on the DSAdmin role:",$System.Status.GetOneErrorText(st)
-	///Create users
-	Set st = ##class(Security.Users).Create("simpleuser", "DSUser", "SYS", "SimpleUser", ns,,,, 1, "Created by Ale.myimports:LockDown",,,,,1,1)
-	Write:st !,"Created simpleuser with password SYS and DSUser role"
-	Write:'st !,"Failed creating simpleuser: ",$System.Status.GetOneErrorText(st)
-	Set st = ##class(Security.Users).Create("poweruser", "DSPowerUser", "SYS", "PowerUser", ns,,,, 1, "Created by Ale.myimports:LockDown",,,,,1,1)
-	Write:st !,"Created poweruser with password SYS and DSPowerUser role"
-	Write:'st !,"Failed creating poweruser: ",$System.Status.GetOneErrorText(st)
-	Set st = ##class(Security.Users).Create("admin", "DSPowerUser,DSAdmin", "SYS", "Admin", ns,,,, 1, "Created by Ale.myimports:LockDown",,,,,1,1)
-	Write:st !,"Created admin user with password SYS and DSAdmin role"
-	Write:'st !,"Failed creating admin user: ",$System.Status.GetOneErrorText(st)
+	///Create role
+	If roles '[ "," {
+		Set st = ##class(Security.Roles).Create(roles, roles, resources)
+		Write:st "New role created: "_roles_" with "_resources
+		Write:'st !,"Error on the "_roles_" role: ",$System.Status.GetOneErrorText(st)
+	}
+	///Create user with associated roles
+	If user '="" {
+		Set st = ##class(Security.Users).Create(user, roles, "SYS", user, ns,,,, 1, "Created by Ale.SecurityTools",,,,,1,1)
+		Write:st !,"Created "_user_" with password SYS and "_roles_" role"_$S(roles[",":"s",1:"")
+		Write:'st !,"Failed creating "_user_": ",$System.Status.GetOneErrorText(st)
+	}
 	//Change Terminal service to Password
 	Set prop("AutheEnabled")=32
 	Set st = ##class(Security.Services).Modify("%Service_Terminal",.prop)
@@ -69,8 +93,12 @@ Given an input ns namespace this method will:
 	Set ptr = 0
 	While $ListNext(list,ptr,webapp){
 		Set web = ##class(Security.Applications).%OpenId(webapp)
-		Set web.AutheEnabled = 16416
-		//Ask to enable DeepSee on "namespace" webapp that is different than /csp/samples, which is special
+		Set changed = 0
+		If web.AutheEnabled '= 16416 {
+			Set web.AutheEnabled = 16416
+			Set changed = 1
+		}
+		//Ask to enable DeepSee on "namespace" webapp that is different than /csp/samples, which is a special one
 		If (webapp = ("/csp/"_$ZCONVERT(ns,"L"))) && (webapp '= "/csp/samples") {
 			Set DeepSeeEnabled = web.DeepSeeEnabled
 			If ('DeepSeeEnabled) { 
@@ -81,21 +109,26 @@ Given an input ns namespace this method will:
 				Set:ans web.DeepSeeEnabled = 1
 				Write:ans !,webapp_" is now DeepSee enabled"
 				Write:'ans !,webapp_" is left DeepSee disabled"
+				Set changed = 1
 			}
-		}		
-		Set st = web.%Save()
-		Write:st !,"Allowed authentication methods for "_webapp_": Password, Login Cookie"
-		Write:'st !,"Failed editing ",webapp," : ",$System.Status.GetOneErrorText(st)
+		}
+		If changed {
+			Set st = web.%Save()
+			Write:st !,"Allowed authentication methods for "_webapp_": Password, Login Cookie"
+			Write:'st !,"Failed editing ",webapp," : ",$System.Status.GetOneErrorText(st)
+		}
 	}
 	//Enable cookie creation
 	Set st = ##Class(Security.System).Get("SYSTEM",.prop)
 	If ('st) {
 		Write:'st !,"Failed to edit Security Authentication/CSP Session Option: ",$System.Status.GetOneErrorText(st)
 	} Else {
-		Set prop("AutheEnabled")=17520
-		Set st = ##Class(Security.System).Modify("SYSTEM",.Properties)
-		Write:st !,"Allowed creation of login cookies"
-		Write:'st !,"Failed to enable cookie creation in Security Authentication/CSP Session Option: ",$System.Status.GetOneErrorText(st)
+		if prop("AutheEnabled")'=17520 {
+			Set prop("AutheEnabled")=17520
+			Set st = ##Class(Security.System).Modify("SYSTEM",.prop)
+			Write:st !,"Allowed creation of login cookies"
+			Write:'st !,"Failed to enable cookie creation in Security Authentication/CSP Session Option: ",$System.Status.GetOneErrorText(st)
+		}
 	}
 	///Remove public USE on %DeepSee_* resources
 	Set list = $LB("%DeepSee_Admin","%DeepSee_Analyzer","%DeepSee_AnalyzerEdit","%DeepSee_Architect","%DeepSee_ArchitectEdit",
@@ -104,18 +137,21 @@ Given an input ns namespace this method will:
 	Set ptr = 0
 	While $ListNext(list,ptr,resource){
 		Do ##class(Security.Resources).Get($ZCONVERT(resource,"L"),.prop)
-		Set prop("PublicPermission")=""
-		Set st=##class(Security.Resources).Modify($ZCONVERT(resource,"L"),.prop)
-		Write:st !,"Removed USE permission on "_resource
-		Write:'st !,"Failed to remove USE permission on "_resource
-	}		
+		If prop("PublicPermission")'="" {
+			Set prop("PublicPermission")=""
+			Set st=##class(Security.Resources).Modify($ZCONVERT(resource,"L"),.prop)
+			Write:st !,"Removed USE permission on "_resource
+			Write:'st !,"Failed to remove USE permission on "_resource
+		}
+	}
+	Write !
 	ZN nsfrom
 ]]></Implementation>
 </Method>
 
 <Method name="SecurityRestore">
 <Description>
-Restore what was done by the SecuritySetup method except for:
+Restore what was done by the DefaultSecuritySetup method except for:
   the DeepSee Enabled checkbox, which is left as is
   Allow creation of Login Cookies settings in in Security Authentication/CSP Session Option, which is left as is</Description>
 <ClassMethod>1</ClassMethod>
@@ -124,7 +160,7 @@ Restore what was done by the SecuritySetup method except for:
 	Set ns = $ZCONVERT(ns,"U")
 	Set nsexists = ##class(%SYS.Namespace).Exists(ns)
 	If ('nsexists) {
-		Write !,ns," namespace does not exist. Aborting"
+		Write ns," namespace does not exist. Aborting"
 		Return
 	}
 	Set nsfrom = $SYSTEM.SYS.NameSpace()
@@ -213,8 +249,6 @@ Restore what was done by the SecuritySetup method except for:
 <IndexLocation>^Ale.SecurityToolsI</IndexLocation>
 <StreamLocation>^Ale.SecurityToolsS</StreamLocation>
 <Data name="SecurityToolsDefaultData">
-<Structure>listnode</Structure>
-<Subscript/>
 <Value name="1">
 <Value>%%CLASSNAME</Value>
 </Value>

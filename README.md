@@ -32,39 +32,39 @@ If your instance does not support UDL formatting please use the .xml file.
 Import the SecurityTools.cls class or the .xml if your instance does not support UDL formatting. 
 
 #### Using the class
-This example calls the three methods in the Ale.SecurityTools class on the SAMPLES namespace: 
+This example calls the four methods in the Ale.SecurityTools class on the SAMPLES namespace: 
 
 <pre>
 SAMPLES><b>Do ##class(Ale.SecurityTools).Info()</b>
- .SecuritySetup("samples")         //Set up security on namepsace
- .SecurityRestore("samples")       //Restore from what SecuritySetup did
+ .DefaultSecuritySetup("samples")         //Set up security on namepsace
+ .SecurityRestore("samples")       //Restore from what DefaultSecuritySetup did
+ .SecuritySetup("samples","user","role","%DeepSee_Portal:U,%Development:U")
+                                   //Create a user with role and resources. You can omit user to create a role
+ .SecuritySetup("samples","user","role1,role2",)  //Create a user with two existing roles
 
-SAMPLES><b>Do ##class(Ale.SecurityTools).SecuritySetup("SAMPLES")</b>
-New role created: DSUser with %DeepSee_Portal,%Service_Terminal,%Development,%DB_SAMPLES
-New role created: DSPowerUser with %DeepSee_AnalyzerEdit,%DeepSee_Portal,
-                                   %DeepSee_PortalEdit,%Service_Terminal,%Development,%DB_SAMPLES
-New role created: DSAdmin user with %DeepSee_Portal,%DeepSee_ArchitectEdit,%DeepSee_AnalyzerEdit,
-                                    %DeepSee_Admin,%Service_Terminal,%Development,%DB_CACHESYS,%DB_SAMPLES
-Created simpleuser with password SYS and DSUser role
-Created poweruser with password SYS and DSPowerUser role
-Created admin with password SYS and DSAdmin role
+SAMPLES><b>Do ##class(Ale.SecurityTools).SecuritySetup("samples","user","role","%DeepSee_Portal:U,%Development:U")</b>
+New role created: role with %DeepSee_Portal:U,%Development:U
+Created user with password SYS and role role
 Allowed authentication methods for /csp/samples: Password, Login Cookie
 Allowed authentication methods for /csp/sys: Password, Login Cookie
 Allowed authentication methods for /csp/sys/bi: Password, Login Cookie
-Allowed creation of login cookies
-Removed USE permission on %DeepSee_Admin
-Removed USE permission on %DeepSee_Analyzer
-Removed USE permission on %DeepSee_AnalyzerEdit
-Removed USE permission on %DeepSee_Architect
-Removed USE permission on %DeepSee_ArchitectEdit
-Removed USE permission on %DeepSee_ListingGroup
-Removed USE permission on %DeepSee_ListingGroupEdit
-Removed USE permission on %DeepSee_ListingGroupSQL
-Removed USE permission on %DeepSee_Portal
-Removed USE permission on %DeepSee_PortalEdit
-Removed USE permission on %DeepSee_ReportBuilder
 
-SAMPLES><b>Do ##class(Ale.SecurityTools).SecurityRestore("SAMPLES")</b>
+SAMPLES><b>Do ##class(Ale.SecurityTools).DefaultSecuritySetup("SAMPLES")</b>
+New role created: DSUser with %DeepSee_Portal:U,%Service_Terminal:U,%Development:U,%DB_SAMPLES:RW
+Created simpleuser with password SYS and DSUser role
+Allowed authentication methods for /csp/samples: Password, Login Cookie
+Allowed authentication methods for /csp/sys: Password, Login Cookie
+Allowed authentication methods for /csp/sys/bi: Password, Login Cookie
+
+New role created: DSPowerUser with %DeepSee_AnalyzerEdit:U,%DeepSee_Portal:U,%DeepSee_PortalEdit:U,%Service_Terminal:U,%Development:U,%DB_SAMPLES:RW
+Created poweruser with password SYS and DSPowerUser role
+
+New role created: DSAdmin with %DeepSee_AnalyzerEdit:U,%DeepSee_Portal:U,%DeepSee_PortalEdit:U,%Service_Terminal:U,%Development:U,%DB_SAMPLES:RW
+
+Created admin with password SYS and DSPowerUser,DSAdmin roles
+
+SAMPLES><br>Do ##class(Ale.SecurityTools).SecurityRestore()</br>
+
 DSUser role deleted
 DSPowerUser role deleted
 DSAdmin role deleted
