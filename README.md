@@ -64,7 +64,6 @@ New role created: DSAdmin with %DeepSee_AnalyzerEdit:U,%DeepSee_Portal:U,%DeepSe
 Created admin with password SYS and DSPowerUser,DSAdmin roles
 
 SAMPLES><b>Do ##class(Ale.SecurityTools).SecurityRestore()</b>
-
 DSUser role deleted
 DSPowerUser role deleted
 DSAdmin role deleted
