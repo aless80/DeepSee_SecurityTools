@@ -55,12 +55,9 @@ Created simpleuser with password SYS and DSUser role
 Allowed authentication methods for /csp/samples: Password, Login Cookie
 Allowed authentication methods for /csp/sys: Password, Login Cookie
 Allowed authentication methods for /csp/sys/bi: Password, Login Cookie
-
 New role created: DSPowerUser with %DeepSee_AnalyzerEdit:U,%DeepSee_Portal:U,%DeepSee_PortalEdit:U,%Service_Terminal:U,%Development:U,%DB_SAMPLES:RW
 Created poweruser with password SYS and DSPowerUser role
-
 New role created: DSAdmin with %DeepSee_AnalyzerEdit:U,%DeepSee_Portal:U,%DeepSee_PortalEdit:U,%Service_Terminal:U,%Development:U,%DB_SAMPLES:RW
-
 Created admin with password SYS and DSPowerUser,DSAdmin roles
 
 SAMPLES><b>Do ##class(Ale.SecurityTools).SecurityRestore()</b>

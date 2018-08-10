@@ -129,7 +129,6 @@ ClassMethod SecuritySetup(ns As %String = "SAMPLES", user As %String = "", roles
 			Write:'st !,"Failed to remove USE permission on "_resource
 		}
 	}
-	Write !
 	ZN nsfrom
 }
 

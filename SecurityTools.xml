@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for UNIX (SUSE Linux Enterprise Server for x86-64) 2017.2.1 (Build 801)" ts="2018-08-10 09:29:30">
+<Export generator="Cache" version="25" zv="Cache for UNIX (SUSE Linux Enterprise Server for x86-64) 2017.2.1 (Build 801)" ts="2018-08-10 09:31:27">
 <Class name="Ale.SecurityTools">
 <Super>%Persistent</Super>
-<TimeChanged>64870,34066.995759</TimeChanged>
+<TimeChanged>64870,34282.151821</TimeChanged>
 <TimeCreated>64869,35465.187427</TimeCreated>
 
 <Method name="Info">
@@ -144,7 +144,6 @@ Do ##class(Ale.SecurityTools).SecuritySetup("SAMPLES", "admin", "DSPowerUser,DSA
 			Write:'st !,"Failed to remove USE permission on "_resource
 		}
 	}
-	Write !
 	ZN nsfrom
 ]]></Implementation>
 </Method>
